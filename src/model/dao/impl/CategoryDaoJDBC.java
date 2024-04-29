@@ -2,8 +2,11 @@ package model.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.List;
 
+import db.DBCon;
 import db.DbException;
 import model.dao.CategoryDao;
 import model.entities.Category;
@@ -17,8 +20,33 @@ public class CategoryDaoJDBC implements CategoryDao {
 		this.conn = conn;
 	}
 
-	@Override
+	@Override // INSERÇÃO
 	public void insert(Category cat) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("INSERT INTO tb_category " + "(name) " + "VALUES " + "(?)",
+					+Statement.RETURN_GENERATED_KEYS);
+
+			st.setString(1, cat.getName());
+
+			int row = st.executeUpdate();
+
+			if (row > 0) {
+				ResultSet rs = st.getGeneratedKeys();
+				if (rs.next()) {
+					int id = rs.getInt(1);
+					cat.setId(id);
+				}
+				DBCon.closeResultSet(rs);
+
+			} else {
+				throw new DbException("Unexpected error! No rows affected! ");
+			}
+		} catch (Exception e) {
+			throw new DbException(e.getMessage());
+		} finally {
+			DBCon.closeStatement(st);
+		}
 
 	}
 
