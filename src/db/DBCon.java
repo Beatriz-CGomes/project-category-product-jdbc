@@ -4,7 +4,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 public class DBCon {
@@ -12,7 +14,7 @@ public class DBCon {
 	private static Connection conn = null;
 
 	// ABRINDO CONEXÃO COM BANDO DE DADOS
-	public Connection getConnection() {
+	public static Connection getConnection() {
 		if (conn == null) {
 			try {
 				Properties props = readProperties();
@@ -51,5 +53,27 @@ public class DBCon {
 		}
 	}
 
+	// FECHAR O ST E RS QUE SÃO COMANDOS DO SQL E NÃO DA JVM
+	public static void closeStatement(Statement st) {
+		if (st != null) {
+			try {
+				st.close();
+			} catch (SQLException e) {
+				throw new DbException(e.getMessage());
+			}
+
+		}
+	}
+
+	public static void closeResultSet(ResultSet rs) {
+		if (rs != null) {
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				throw new DbException(e.getMessage());
+			}
+
+		}
+	}
 	// fechando classe
 }
