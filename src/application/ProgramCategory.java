@@ -18,6 +18,9 @@ public class ProgramCategory {
 		catDao.insert(category);
 		System.out.println("Inserted! New id = " + category.getId());
 
+		System.out.println("\n*** TEST 2: Category FindById *** ");
+		category = catDao.findById(5);
+		System.out.println(category);
 		sc.close();
 	}
 

@@ -10,9 +10,9 @@ public interface CategoryDao {
 
 	void update(Category cat);
 
-	void deleteById(Category id);
+	void deleteById(Integer id);
 
-	Category findById(Category id);
+	Category findById(Integer id);
 
 	List<Category> findAll();
 

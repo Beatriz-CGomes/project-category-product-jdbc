@@ -2,6 +2,7 @@ package model.dao;
 
 import db.DBCon;
 import model.dao.impl.CategoryDaoJDBC;
+import model.dao.impl.ProductDaoJDBC;
 
 public class DaoFactory {
 
@@ -9,5 +10,9 @@ public class DaoFactory {
 
 	public static CategoryDao createCategoryDao() {
 		return new CategoryDaoJDBC(DBCon.getConnection());
+	}
+
+	public static ProductDao createProductDao() {
+		return new ProductDaoJDBC();
 	}
 }
