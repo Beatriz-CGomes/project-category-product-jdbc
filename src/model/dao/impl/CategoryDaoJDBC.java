@@ -5,10 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import db.DBCon;
 import db.DbException;
+import db.DbIntegrityException;
 import model.dao.CategoryDao;
 import model.entities.Category;
 
@@ -43,7 +45,7 @@ public class CategoryDaoJDBC implements CategoryDao {
 			} else {
 				throw new DbException("Unexpected error! No rows affected! ");
 			}
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
 		} finally {
 			DBCon.closeStatement(st);
@@ -51,15 +53,48 @@ public class CategoryDaoJDBC implements CategoryDao {
 
 	}
 
+	// ATUALIZANDO
 	@Override
 	public void update(Category cat) {
-		// TODO Auto-generated method stub
+		PreparedStatement st = null;
+
+		try {
+
+			st = conn.prepareStatement("UPDATE tb_category " + "SET name = ? " + "WHERE Id = ? ");
+
+			st.setString(1, cat.getName());
+			st.setInt(2, cat.getId());
+
+			st.executeUpdate();
+
+		} catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		} finally {
+			DBCon.closeStatement(st);
+		}
 
 	}
 
+	// DELETANDO
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
+		PreparedStatement st = null;
+
+		try {
+			st = conn.prepareStatement("DELETE FROM tb_category " + "WHERE Id = ?");
+
+			st.setInt(1, id);
+
+			int row = st.executeUpdate();
+			if (row == 0) {
+				throw new DbIntegrityException("ID NÃO EXISTE!");
+			}
+
+		} catch (SQLException e) {
+			throw new DbIntegrityException(e.getMessage());
+		} finally {
+			DBCon.closeStatement(st);
+		}
 
 	}
 
@@ -93,10 +128,34 @@ public class CategoryDaoJDBC implements CategoryDao {
 
 	}
 
+	// ENCONTRANDO TUDO QUE ESTÁ CADASTRADO NO BANCO EM CATEGORIAS
 	@Override
 	public List<Category> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+
+		try {
+
+			st = conn.prepareStatement("SELECT * FROM tb_category ORDER BY Name ");
+
+			rs = st.executeQuery();
+
+			List<Category> listCategory = new ArrayList<>();
+			while (rs.next()) {
+				Category category = new Category();
+				category.setId(rs.getInt("id"));
+				category.setName(rs.getString("name"));
+				listCategory.add(category);
+
+			}
+			return listCategory;
+
+		} catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		} finally {
+			DBCon.closeStatement(st);
+			DBCon.closeResultSet(rs);
+		}
 	}
 
 }
