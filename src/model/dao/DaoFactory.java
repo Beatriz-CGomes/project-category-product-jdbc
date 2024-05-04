@@ -13,6 +13,6 @@ public class DaoFactory {
 	}
 
 	public static ProductDao createProductDao() {
-		return new ProductDaoJDBC();
+		return new ProductDaoJDBC(DBCon.getConnection());
 	}
 }

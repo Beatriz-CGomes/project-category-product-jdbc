@@ -10,7 +10,7 @@ public class Product implements Serializable {
 
 	private Integer id;
 	private String name;
-	private String discription;
+	private String description;
 	private Integer quantity;
 	private Double price;
 	private Date expirationDate;
@@ -21,12 +21,11 @@ public class Product implements Serializable {
 
 	}
 
-	public Product(Integer id, String name, String discription, Integer quantity, Double price, Date expirationDate,
+	public Product(Integer id, String name, String description, Integer quantity, Double price, Date expirationDate,
 			Category category) {
-		super();
 		this.id = id;
 		this.name = name;
-		this.discription = discription;
+		this.description = description;
 		this.quantity = quantity;
 		this.price = price;
 		this.expirationDate = expirationDate;
@@ -49,12 +48,12 @@ public class Product implements Serializable {
 		this.name = name;
 	}
 
-	public String getDiscription() {
-		return discription;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setDiscription(String discription) {
-		this.discription = discription;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public Integer getQuantity() {
@@ -111,7 +110,7 @@ public class Product implements Serializable {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Id: " + id + "\n");
 		sb.append("Name: " + name + "\n");
-		sb.append("Discription: " + discription + "\n");
+		sb.append("Description: " + description + "\n");
 		sb.append("Quantity: " + quantity + "\n");
 		sb.append("Price: " + String.format("%.2f", price) + "\n");
 		sb.append("Expiration Date" + expirationDate);
